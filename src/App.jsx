@@ -1,7 +1,8 @@
 import { Button, Col, Container, Dropdown, Navbar, Row } from "react-bootstrap";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 function App() {
   const [before, setBefore] = useState("");
@@ -10,6 +11,7 @@ function App() {
   const [result, setResult] = useState("")
 
   const clickHandlerOne = (e) => {
+
     const language = e.target.getAttribute("data-value");
 
     if (language) {
@@ -26,7 +28,21 @@ function App() {
   };
 
   const textTranslate = async () => {
-    if (textOne.length < 1 || !before || !after) return;
+
+    if (textOne.length < 1 || !before || !after) {
+      toast('زبان ورودی و خروجی ومتن وارد کنید', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+        return;
+    };
 
     try {
       const response = await axios.get(
@@ -44,9 +60,6 @@ function App() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(before, after);
-  // }, [before, after]);
 
   return (
     <>
@@ -76,6 +89,7 @@ function App() {
             </Dropdown>
 
             <textarea
+              placeholder="Please Write Here"
               className="mt-4 p-2"
               value={textOne}
               onChange={(e) => setTextOne(e.target.value)}
@@ -128,6 +142,7 @@ function App() {
       >
         Developed By Hassan
       </div>
+      <ToastContainer />
     </>
   );
 }
